@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Program2
+namespace Program1
 {
-    //在整个订单系统中有多条订单
     class OrderService
     {
         //在一个系统中存储多个订单
         public List<Order> orderlist = new List<Order>();
-        public List<OrderDetails> orderdetail = new List<OrderDetails>();
 
         //添加订单,返回新生成的订单系统
-        public List<Order> AddOrder(string ordernumber,Client client)
+        public List<Order> AddOrder(string ordernumber, Client client)
         {
             Order neworder = new Order(ordernumber, client);
             orderlist.Add(neworder);
@@ -37,12 +35,12 @@ namespace Program2
 
         //修改订单，即修改订单中商品的数量、增加商品减少商品等，在Order类中实现
 
-        
+
         Order orderFound; //待找到的订单
         //根据订单编号查询订单,返回找到的订单
         public Order FindOrderByNumber(string number)
         {
-            foreach(Order order in orderlist)
+            foreach (Order order in orderlist)
             {
                 if (order.Id == number)
                 {
@@ -58,9 +56,10 @@ namespace Program2
         public List<Order> FindOrderByProName(string name)
         {
             List<Order> result = new List<Order>();
-            foreach(Order order in orderlist)
+            foreach (Order order in orderlist)
             {
-                foreach (OrderDetails details in orderdetail)
+                for(int index=0;index< orderlist.Count(); index++)
+                foreach (OrderDetails details in orderlist[index].Details)
                 {
                     if (details.goods.name == name)
                     {
@@ -76,7 +75,7 @@ namespace Program2
         public List<Order> FindOrderByCliName(string name)
         {
             List<Order> result = new List<Order>();
-            foreach(Order order in orderlist)
+            foreach (Order order in orderlist)
             {
                 if (order.client.name == name)
                 {

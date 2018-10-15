@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Program2
+namespace Program1
 {
-    //一个订单里有多种商品，并包含订单编号及客户姓名
     class Order
     {
         private List<OrderDetails> orderdata = new List<OrderDetails>();
 
         public string Id { get; set; }
-        public Client client { get; set; } 
+        public Client client { get; set; }
         public Order(string id, Client client)
         {
             this.Id = id;
@@ -27,7 +26,7 @@ namespace Program2
 
         //修改订单
         //修改商品数量,返回修改好的订单
-        public List<OrderDetails> ChangeAmount(OrderDetails product,int newamount)
+        public List<OrderDetails> ChangeAmount(OrderDetails product, int newamount)
         {
             product.OrderAmount = newamount;
             return orderdata;
@@ -55,5 +54,8 @@ namespace Program2
             }
             return Details;
         }
+
+        //实现IComparable接口
+        //public void CompareTo()
     }
 }
