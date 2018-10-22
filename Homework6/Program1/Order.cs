@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Program1
 {
-    class Order
+    public class Order
     {
         private List<OrderDetails> orderdata = new List<OrderDetails>();
 
@@ -17,6 +17,7 @@ namespace Program1
             this.Id = id;
             this.client = client;
         }
+        public Order() { }
 
         public double OrderSum()
         {
@@ -58,6 +59,5 @@ namespace Program1
             }
             return Details;
         }
-        
     }
 }

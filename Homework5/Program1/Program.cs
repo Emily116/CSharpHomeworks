@@ -73,6 +73,13 @@ namespace Program1
                 }
             }
 
+            //查询总额大于10000元的订单(此处暂以200元为例)
+            Console.WriteLine("Here are orders over 10000 :");
+            var m5 = from order in os.orderlist where order.OrderSum() > 200 select order;
+            foreach(var order in m5)
+            {
+                Console.WriteLine(order.Id + " " + order.OrderSum());
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Program1
 {
-    class OrderDetails
+    public class OrderDetails
     {
         public string OrderId { get; set; }       //商品编号
 
@@ -20,6 +20,8 @@ namespace Program1
             this.OrderAmount = amount;
             this.goods = goods;
         }
+        public OrderDetails() { }
+
         public override bool Equals(object obj)
         {
             var detail = obj as OrderDetails;
