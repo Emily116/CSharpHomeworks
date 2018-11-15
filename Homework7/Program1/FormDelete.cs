@@ -70,6 +70,8 @@ namespace Program1
             {
                 if (Form1.os.orderlist[i].OrderId == orderid)
                     Form1.os.orderlist.Remove(Form1.os.orderlist[i]);
+                else
+                    MessageBox.Show("找不到该订单！");
             }
 
             Form3 frm4 = new Form3();

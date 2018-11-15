@@ -18,11 +18,11 @@ namespace Program2
         public List<Order> orderlist = new List<Order>();
 
         //添加订单,返回新生成的订单系统
-        public List<Order> AddOrder(string ordernumber, Client client)
+        public List<Order> AddOrder(Order order)
         {
-            Order neworder = new Order(ordernumber, client);
-            orderlist.Add(neworder);
-            Console.WriteLine("Add an order " + ordernumber + " from " + client);
+            //Order neworder = new Order(ordernumber, client);
+            orderlist.Add(order);
+            Console.WriteLine("Add an order " + order.OrderId + " from " + order.CliName);
             return orderlist;
         }
 
@@ -102,12 +102,36 @@ namespace Program2
         }
 
         //Xml反序列化
-        public object Import(XmlSerializer ser, string FileName)
+        public object Import(string path)
         {
-            FileStream fs = new FileStream(FileName, FileMode.Open);
-            object obj = ser.Deserialize(fs);
-            fs.Close();
-            return obj;
+            //FileStream fs = new FileStream(FileName, FileMode.Open);
+            //object obj = ser.Deserialize(fs);
+            //fs.Close();
+            //return obj;
+            if (Path.GetExtension(path) != ".xml")
+                throw new ArgumentException("It isn't a xml file!");
+            XmlSerializer xs = new XmlSerializer(typeof(List<Order>));
+            //List<Order> result = new List<Order>();
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                List<Order> temp = (List<Order>)xs.Deserialize(fs);
+                foreach(Order order in temp)
+                {
+                    //int Id = Convert.ToInt32(order.OrderId);
+                    //orderlist[Id] = order;
+                    orderlist.Add(order);
+                }
+                //temp.ForEach(order =>
+                //{
+                //    if (!orderlist.Contains(order.OrderId))
+                //    {
+                //        orderDict[order.Id] = order;
+                //        result.Add(order);
+                //    }
+                //});
+            }
+            return result;
         }
     }
 }

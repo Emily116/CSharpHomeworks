@@ -8,6 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Program2;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace Program1
 {
@@ -42,14 +49,16 @@ namespace Program1
         private void button1_Click(object sender, EventArgs e)
         {
             FormNew frm1 = new FormNew();
-            frm1.Show();
+            frm1.ShowDialog();
+            
         }
+    
 
         //删除订单
         private void button2_Click(object sender, EventArgs e)
         {
             FormDelete frm2 = new FormDelete();
-            frm2.Show();
+            frm2.ShowDialog();
         }
 
         //关闭窗口
@@ -105,6 +114,7 @@ namespace Program1
                 os.orderlist.Where(s => s.ProName == KeyWord);
             else
                 MessageBox.Show("请先选择一种查询方式！");
+            
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -113,6 +123,63 @@ namespace Program1
         }
 
         private void formNewBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //刷新订单
+        private void button5_Click(object sender, EventArgs e)
+        {
+            OrderService oss = new OrderService();
+            programBindingSource.DataSource = oss.orderlist;
+            programBindingSource.DataSource = os.orderlist;
+        }
+
+        //导入订单
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result.Equals(DialogResult.OK))
+            {
+                //XmlSerializer xmlser = new XmlSerializer(typeof(List<Order>));
+                String fileName = openFileDialog1.FileName;
+                os.Import(fileName);
+                programBindingSource.DataSource = os.orderlist;
+            }
+        }
+
+        //导出为HTML
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //DialogResult result = saveFileDialog1.ShowDialog();
+            //String fileName = null;
+            //if (result.Equals(DialogResult.OK))
+            //{
+            //    XmlSerializer xmlser = new XmlSerializer(typeof(List<Order>));
+            //    fileName = saveFileDialog1.FileName;
+            //    os.Export(xmlser, fileName, os.orderlist);
+            //}
+
+            XmlSerializer xmlser = new XmlSerializer(typeof(List<Order>));
+            string fileName = "List.xml";
+            os.Export(xmlser, fileName, os.orderlist);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(fileName);
+            XPathNavigator nav = doc.CreateNavigator();
+            nav.MoveToRoot();
+            XslTransform xt = new XslTransform();
+            xt.Load(@"..\..\List.xslt");
+            FileStream fs = File.OpenWrite(@"..\..\List.html");
+            XmlTextWriter writer = new XmlTextWriter(fs, System.Text.Encoding.Default);
+            xt.Transform(nav, null, writer);
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
 
         }

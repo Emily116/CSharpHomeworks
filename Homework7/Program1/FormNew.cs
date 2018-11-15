@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Program2;
+using System.Text.RegularExpressions;
 
 namespace Program1
 {
     public partial class FormNew : Form
     {
+        Order result = null;
+
         public FormNew()
         {
             InitializeComponent();
@@ -79,35 +82,45 @@ namespace Program1
             int quantity = Int32.Parse(textBox4.Text);
             double price = Double.Parse(textBox5.Text);
 
-            //binding1.DataSource = Form1.os.orderlist;
-            //textBox2.DataBindings.Add("Text", binding1, "客户姓名");
-            //textBox1.DataBindings.Add("Text", binding1, "订单编号");
-            //textBox3.DataBindings.Add("Text", binding1, "商品名称");
-            //textBox4.DataBindings.Add("Text", binding1, "商品数量");
-            //textBox5.DataBindings.Add("Text", binding1, "商品单价");
-
-            Order ord = new Order(cliname, orderid, proname, quantity, price);
-            Form1.os.orderlist.Add(ord);
-            
-            //Form1 f1;
-            //f1 = (Form1)this.Owner;
-            //f1.Refresh();
-            
-
-            Form2 frm3 = new Form2();
-            frm3.Show();
-            frm3.Visible = false;
-            frm3.ShowDialog();
-            if(frm3.DialogResult==DialogResult.OK)
+            //订单号不能为空，且为“年月日+三位流水号”的格式
+            string pattern = @"^((((1[6-9]|[2-9]\d)\d{2})+(0?[13578]|1[02])+(0?[1-9]|[12]\d|3[01]))|(((1[6-9]|[2-9]\d)\d{2})+(0?[13456789]|1[012])+(0?[1-9]|[12]\d|30))|(((1[6-9]|[2-9]\d)\d{2})-0?2-(0?[1-9]|1\d|2[0-9]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-))+[0-9]{3}$";
+            if (!Regex.IsMatch(orderid, pattern))
             {
-                frm3.Dispose();
-                this.Close();
+                MessageBox.Show("订单号不符合格式！");
+                Refresh();
+            }
+            else if(orderid==null)
+            {
+                MessageBox.Show("订单号不能为空！");
+                Refresh();
             }
             else
             {
-                frm3.Dispose();
-                this.Close();
+                Order ord = new Order(cliname, orderid, proname, quantity, price);
+                Form1.os.orderlist.Add(ord);
+
+                result = (Order)ord;
+
+                Form2 frm3 = new Form2();
+                frm3.Show();
+                frm3.Visible = false;
+                frm3.ShowDialog();
+                if (frm3.DialogResult == DialogResult.OK)
+                {
+                    frm3.Dispose();
+                    this.Close();
+                }
+                else
+                {
+                    frm3.Dispose();
+                    this.Close();
+                }
             }
+        }
+
+        public Order getResult()
+        {
+            return result;
         }
 
         private void FormNew_Load(object sender, EventArgs e)
