@@ -28,8 +28,8 @@ namespace Program1
         {
             InitializeComponent();
 
-            Order ord1 = new Order("Mark", "0001", "apple", 4, 1.5);
-            Order ord2 = new Order("Jackson", "0002", "milk", 2, 3.0);
+            Order ord1 = new Order("Mark", "20181129001", "apple", 4, 1.5);
+            Order ord2 = new Order("Jackson", "20181129002", "milk", 2, 3.0);
             
             os.orderlist.Add(ord1);
             os.orderlist.Add(ord2);
@@ -151,15 +151,6 @@ namespace Program1
         //导出为HTML
         private void button7_Click(object sender, EventArgs e)
         {
-            //DialogResult result = saveFileDialog1.ShowDialog();
-            //String fileName = null;
-            //if (result.Equals(DialogResult.OK))
-            //{
-            //    XmlSerializer xmlser = new XmlSerializer(typeof(List<Order>));
-            //    fileName = saveFileDialog1.FileName;
-            //    os.Export(xmlser, fileName, os.orderlist);
-            //}
-
             XmlSerializer xmlser = new XmlSerializer(typeof(List<Order>));
             string fileName = "List.xml";
             os.Export(xmlser, fileName, os.orderlist);
